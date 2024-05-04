@@ -1,0 +1,62 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.controls {
+    display: flex;
+    width: 600px;
+    margin: 0 auto 10px;
+    justify-content: space-around;
+}
+
+.stats {
+
+    display: flex;
+    width: 600px;
+    margin: 0 auto 10px;
+    justify-content: space-around;
+}
+
+.grid-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 500px;
+}
+
+.grid div {
+    border: 1px solid gray;
+    flex: 0 0 6.66%;
+    width: 100%;
+    aspect-ratio: 1/1;
+    margin: 0 auto;
+}
+
+button {
+    margin: 20px;
+}
+
+.player {
+    background-color: purple;
+}
+
+.invaders {
+    background-color: blue;
+}
+
+.bombs {
+    background-color: red;
+}
+
+.lasers {
+    background-color: green;
+}
