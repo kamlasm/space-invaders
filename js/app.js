@@ -21,6 +21,7 @@ const livesEl = document.querySelector(".lives")
 const messageEl = document.querySelector(".game-message")
 const cells = document.querySelectorAll(".grid > div")
 const playBtn = document.querySelector(".play-button")
+const playAganBtn = document.querySelector(".play-again-btn")
 
 /*-------------- Functions -------------*/
 
@@ -30,12 +31,18 @@ function init() {
     gameOver = false
     score = 0
     lives = 3
+    gameMessage = ""
+    invaderMoveCounter = 1
+    invaderMoveDirection = 1
+    playAganBtn.classList.add("hide")
     render()
 }
 
 init()
 
 function startGame() {
+    playBtn.classList.add("hide")
+    document.addEventListener("keyup", playerAction)
     setTimers()
 }
 
@@ -64,16 +71,18 @@ function updateInvaderIdx(invaderMove) {
     })
     render()
 }
+
 let bombMoveTimer
 function createBombs() {
     randomInvaderIdx = Math.floor(Math.random() * invadersIdxs.length)
     let bombIdx = invadersIdxs[randomInvaderIdx]
-
     bombMoveTimer = setInterval(() => {
+        cells[bombIdx].classList.remove("bombs")
         if (bombIdx < 209 && !gameOver) {
             bombIdx += width
             bombHitsPlayer(bombIdx)
-            renderBombs(bombIdx)
+            cells[bombIdx].classList.add("bombs")
+            
         }
     }, 500);
 }
@@ -115,21 +124,26 @@ let laserTimer
 function playerShoots() {
     let laserIdx = playerIdx - width
     laserTimer = setInterval(() => {
+        cells[laserIdx].classList.remove("lasers")
         if (laserIdx > 15 && !gameOver) {
             laserIdx -= width
+            cells[laserIdx].classList.add("lasers")
             laserHitsInv(laserIdx)
-            renderLasers(laserIdx)
+
         }
     }, 100)
 }
 
 function laserHitsInv(laserIdx) {
+    console.log(laserIdx);
     if (invadersIdxs.includes(laserIdx)) {
         let indexHit = invadersIdxs.findIndex((invaderIdx) => {
             return invaderIdx === laserIdx
         })
         invadersIdxs.splice(indexHit, 1)
-       score += 10
+        score += 10
+        clearInterval(laserTimer)
+        cells[laserIdx].classList.remove("lasers")
     }
 }
 
@@ -138,6 +152,8 @@ function loseGame() {
     if (invaderMoveCounter > 95 || lives === 0) {
         clearInterval(invadersTimer)
         clearInterval(bombsTimer)
+        clearInterval(bombMoveTimer)
+        clearInterval(laserTimer)
 
         gameOver = true
         gameMessage = loseMessage
@@ -147,6 +163,10 @@ function loseGame() {
 
 function winGame() {
     if (invadersIdxs.length === 0) {
+        clearInterval(invadersTimer)
+        clearInterval(bombsTimer)
+        clearInterval(bombMoveTimer)
+        clearInterval(laserTimer)
         gameOver = true
         gameMessage = winMessage
         renderGameOver()
@@ -156,26 +176,26 @@ function winGame() {
 function renderGameOver() {
     if (gameOver) {
         messageEl.innerText = gameMessage
+        playAganBtn.classList.remove("hide")
     }
 }
 
 
-function renderBombs(bombIdx) {
-    cells.forEach((cell, idx) => {
-        cells[idx].classList.remove("bombs")
+// function renderBombs(bombIdx) {
+//     cells[bombIdx].classList.remove("bombs")
 
-    })
-    cells[bombIdx].classList.add("bombs")
-}
+    
+//     cells[bombIdx].classList.add("bombs")
+// }
 
-function renderLasers(laserIdx) {
-    cells.forEach((cell, idx) => {
+// function renderLasers(laserIdx) {
+//     cells.forEach((cell, idx) => {
 
-        cells[idx].classList.remove("lasers")
-    })
+//         cells[idx].classList.remove("lasers")
+//     })
 
-    cells[laserIdx].classList.add("lasers")
-}
+//     cells[laserIdx].classList.add("lasers")
+// }
 
 function render() {
     cells.forEach((cell, idx) => {
@@ -188,13 +208,20 @@ function render() {
     invadersIdxs.forEach((invaderIdx) => {
         cells[invaderIdx].classList.add("invaders")
     })
-    
+
     livesEl.innerText = lives
     scoreEl.innerText = score
+    messageEl.innerText = gameMessage
 }
 
+function restartGame() {
+    init()
+    setTimers()
+}
 
 
 /*----------- Event Listeners ----------*/
 playBtn.addEventListener("click", startGame)
-document.addEventListener("keydown", playerAction)
+
+
+playAganBtn.addEventListener("click", restartGame)

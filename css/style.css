@@ -43,6 +43,7 @@ body {
 
 button {
     margin: 20px;
+    padding: 5px 20px;
 }
 
 .player {
@@ -59,4 +60,8 @@ button {
 
 .lasers {
     background-color: green;
+}
+
+.hide {
+    display: none;
 }
