@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Sedan+SC&display=swap');
+
 * {
     box-sizing: border-box;
 }
@@ -5,19 +7,27 @@
 body {
     text-align: center;
     margin: 0 auto;
+    font-family: "Roboto Slab", sans-serif;
+    background-color: rgb(209, 210, 229);
+    color: rgb(4, 5, 44);
+}
+
+h1 {
+    font-family: "Sedan SC", sans-serif;
+    margin: 30px auto;
 }
 
 .controls {
     display: flex;
-    width: 600px;
+    width: 650px;
     margin: 0 auto 10px;
     justify-content: space-around;
 }
 
 .stats {
-
+    font-family: "Sedan SC", sans-serif;
     display: flex;
-    width: 600px;
+    width: 650px;
     margin: 0 auto 10px;
     justify-content: space-around;
 }
@@ -30,11 +40,15 @@ body {
 .grid {
     display: flex;
     flex-wrap: wrap;
-    width: 500px;
+    width: 600px;
+    background-image: url("../images/hogwarts-2.png");
+    background-size: cover;
+    background-position: center;
+    background-color: rgb(4, 5, 44);
 }
 
 .grid div {
-    border: 1px solid gray;
+   
     flex: 0 0 6.66%;
     width: 100%;
     aspect-ratio: 1/1;
@@ -44,24 +58,42 @@ body {
 button {
     margin: 20px;
     padding: 5px 20px;
+    border-radius: 10px;
 }
 
 .player {
-    background-color: purple;
+    background-image: url("../images/harry-potter.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
 }
 
 .invaders {
-    background-color: blue;
+    background-image: url("../images/death-eater.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
 
 .bombs {
-    background-color: red;
+    background-image: url("../images/green-spell.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
 
 .lasers {
-    background-color: green;
+    background-image: url("../images/red-spell.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
 
 .hide {
     display: none;
+}
+
+.lose-image {
+    height: 100px;
 }
