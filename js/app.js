@@ -1,21 +1,25 @@
 /*-------------- Constants -------------*/
 const width = 15
-const winMessage = "You win!"
-const loseMessage = "You lose!"
 const losingIndxs = [210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224]
+const winMessage = "You win! Hogwarts is safe!"
+const loseMessage = "You lose! Voldemort has taken over Hogwarts!"
+const winImage = "images/harry-ron-hermione.png"
+const loseImage = "images/voldy.png"
+
 /*---------- Variables (state) ---------*/
+let gameOver
 let score = 0
 let lives = 3
-let gameOver
 let playerIdx = 0
 let invadersIdxs = []
 let invadersTimer
 let bombsTimer
-let gameMessage
 let invaderMoveCounter = 1
 let invaderMoveDirection = 1
-// let bombMoveTimer
-// let laserTimer
+let gameMessage
+let gameImage
+let spaceBarTimeOne = Date.now()
+let spaceBarTimeTwo
 
 /*----- Cached Element References  -----*/
 const scoreEl = document.querySelector(".score")
@@ -24,8 +28,7 @@ const messageEl = document.querySelector(".game-message")
 const cells = document.querySelectorAll(".grid > div")
 const playBtn = document.querySelector(".play-button")
 const playAganBtn = document.querySelector(".play-again-btn")
-const loseImage = document.querySelector(".lose-image")
-
+const gameOverImage = document.querySelector(".game-over-image")
 
 /*-------------- Functions -------------*/
 
@@ -39,6 +42,7 @@ function init() {
     invaderMoveCounter = 1
     invaderMoveDirection = 1
     playAganBtn.classList.add("hide")
+    gameOverImage.src = ""
     render()
 }
 
@@ -106,10 +110,17 @@ function bombHitsPlayer(bombIdx) {
 
 function playerAction(event) {
     event.preventDefault()
+    
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
         playerMoves(event)
+
     } else if (event.key === " ") {
-        playerShoots()
+        spaceBarTimeTwo = Date.now()
+        if (spaceBarTimeTwo - spaceBarTimeOne > 500) {
+            spaceBarTimeOne = spaceBarTimeTwo
+            playerShoots()
+        }
+        
     }
     render()
 }
@@ -133,36 +144,29 @@ function playerMoves(event) {
 
 function playerShoots() {
     let laserIdx = playerIdx - width
-
     let hit = false
 
     let laserTimer = setInterval(() => {
         cells[laserIdx].classList.remove("lasers")
+        
         if (laserIdx > 15 && !gameOver) {
             laserIdx -= width
             cells[laserIdx].classList.add("lasers")
-            // laserHitsInv(laserIdx)
-            // console.log("laser index ", laserIdx);
-            // console.log("invaders indexes: ", invadersIdxs);
-            // console.log(cells);
+
             if (!hit) {
                 
                 if (invadersIdxs.includes(laserIdx)) {
                     let indexHit = invadersIdxs.findLastIndex((invaderIdx) => {
                         return invaderIdx === laserIdx
                     })
-                    // console.log("invader index hit: ", invadersIdxs[indexHit])
-                    // console.log("laser index hit: ", laserIdx);
-                    invadersIdxs.splice(indexHit, 1)
-                    // console.log("Invaders indexes post hit: ", invadersIdxs);
-                    score += 10
 
+                    invadersIdxs.splice(indexHit, 1)
+                    score += 10
                     cells[indexHit].classList.remove("invaders")
                     cells[laserIdx].classList.remove("lasers")
                     render()
                     clearInterval(laserTimer)
                     hit = true
-                    //console.log(laserIdx);
                 }
             }
 
@@ -173,80 +177,11 @@ function playerShoots() {
     }, 200)
 }
 
-// function laserHitsInv(laserIdx) {
-//     // console.log(laserIdx)
-//     if (invadersIdxs.includes(laserIdx)) {
-//         let indexHit = invadersIdxs.findIndex((invaderIdx) => {
-//             return invaderIdx === laserIdx
-//         })
-//         invadersIdxs.splice(indexHit, 1)
-//         score += 10
-//         clearInterval(laserTimer)
-//         cells[laserIdx].classList.remove("lasers")
-
-//         //console.log(laserIdx);
-//     }
-// }
-
-function loseGame() {
-
-    if (invadersIdxs.some((invaderIdx) => {
-        return losingIndxs.includes(invaderIdx)
-    }) || lives === 0) {
-        gameOver = true
-        gameMessage = loseMessage
-        renderGameOver()
-    }
-}
-
-function winGame() {
-    if (invadersIdxs.length === 0) {
-        gameOver = true
-        gameMessage = winMessage
-        renderGameOver()
-    }
-}
-
-function renderGameOver() {
-    if (gameOver) {
-        clearInterval(invadersTimer)
-        clearInterval(bombsTimer)
-        // clearInterval(bombMoveTimer)
-        // clearInterval(laserTimer)
-        messageEl.innerText = gameMessage
-        playAganBtn.classList.remove("hide")
-        loseImage.classList.remove("hide")
-        cells.forEach((cell, idx) => {
-            cells[idx].classList.remove("bombs")
-            cells[idx].classList.remove("lasers")
-        })
-        document.removeEventListener("keyup", playerAction)
-    }
-}
-
-
-// function renderBombs(bombIdx) {
-//     cells[bombIdx].classList.remove("bombs")
-
-
-//     cells[bombIdx].classList.add("bombs")
-// }
-
-// function renderLasers(laserIdx) {
-//     cells.forEach((cell, idx) => {
-
-//         cells[idx].classList.remove("lasers")
-//     })
-
-//     cells[laserIdx].classList.add("lasers")
-// }
-
 function render() {
     cells.forEach((cell, idx) => {
         cells[idx].classList.remove("player")
         cells[idx].classList.remove("invaders")
     })
-
 
     cells[playerIdx].classList.add("player")
     invadersIdxs.forEach((invaderIdx) => {
@@ -258,13 +193,46 @@ function render() {
     messageEl.innerText = gameMessage
 }
 
+function loseGame() {
+    if (invadersIdxs.some((invaderIdx) => {
+        return losingIndxs.includes(invaderIdx)
+    }) || lives === 0) {
+        gameOver = true
+        gameMessage = loseMessage
+        gameImage = loseImage
+        renderGameOver()
+    }
+}
+
+function winGame() {
+    if (invadersIdxs.length === 0) {
+        gameOver = true
+        gameMessage = winMessage
+        gameImage = winImage
+        renderGameOver()
+    }
+}
+
+function renderGameOver() {
+    if (gameOver) {
+        clearInterval(invadersTimer)
+        clearInterval(bombsTimer)
+        messageEl.innerText = gameMessage
+        playAganBtn.classList.remove("hide")
+        gameOverImage.src = gameImage
+        cells.forEach((cell, idx) => {
+            cells[idx].classList.remove("bombs")
+            cells[idx].classList.remove("lasers")
+        })
+        document.removeEventListener("keyup", playerAction)
+    }
+}
+
 function restartGame() {
     init()
     startGame()
 }
 
-
 /*----------- Event Listeners ----------*/
 playBtn.addEventListener("click", startGame)
-
 playAganBtn.addEventListener("click", restartGame)

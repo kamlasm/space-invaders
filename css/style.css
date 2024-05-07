@@ -17,9 +17,15 @@ h1 {
     margin: 30px auto;
 }
 
+.intro {
+    margin: 0 auto;
+    width: 600px;
+
+}
+
 .controls {
     display: flex;
-    width: 650px;
+    width: 600px;
     margin: 0 auto 10px;
     justify-content: space-around;
 }
@@ -27,9 +33,10 @@ h1 {
 .stats {
     font-family: "Sedan SC", sans-serif;
     display: flex;
-    width: 650px;
+    width: 600px;
     margin: 0 auto 10px;
-    justify-content: space-around;
+    justify-content: space-between;
+    padding: 0 5px;
 }
 
 .grid-wrapper {
@@ -41,7 +48,7 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     width: 600px;
-    background-image: url("../images/hogwarts-2.png");
+    background-image: url("../images/hogwarts.png");
     background-size: cover;
     background-position: center;
     background-color: rgb(4, 5, 44);
@@ -59,6 +66,10 @@ button {
     margin: 20px;
     padding: 5px 20px;
     border-radius: 10px;
+    background-color: rgb(4, 5, 44);
+    color: rgb(209, 210, 229);
+    font-family: "Roboto Slab", sans-serif;
+    font-size: 16px;
 }
 
 .player {
@@ -77,14 +88,14 @@ button {
 }
 
 .bombs {
-    background-image: url("../images/green-spell.png");
+    background-image: url("../images/green-spell-2.png");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
 
 .lasers {
-    background-image: url("../images/red-spell.png");
+    background-image: url("../images/red-spell-2.png");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -94,6 +105,6 @@ button {
     display: none;
 }
 
-.lose-image {
+img {
     height: 100px;
 }
