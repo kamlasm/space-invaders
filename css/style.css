@@ -8,36 +8,80 @@ body {
     text-align: center;
     margin: 0 auto;
     font-family: "Roboto Slab", sans-serif;
-    background-color: rgb(209, 210, 229);
-    color: rgb(4, 5, 44);
+    background-image: radial-gradient(#740001, #330102);
+
+    background-color: #740001;
+    color: #faefd0;
+    
 }
 
 h1 {
     font-family: "Sedan SC", sans-serif;
-    margin: 30px auto;
+    margin: 40px auto;
+    color: #D3A625;
+    font-size: 40px;
+}
+
+
+h2, h3 {
+    color: #D3A625;
+}
+
+.how-to-play {
+    margin: 0 auto 30px;
+    width: 500px;
+    border: 2px solid #740001;
+    border-radius: 10px;
+    background-color: #ae0001;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    
+}
+
+.how-to-play h3 {
+    color: #faefd0;
+    margin: 10px 0;
 }
 
 .intro {
-    margin: 0 auto;
-    width: 600px;
-
+    margin: 0 auto 5px;  
+    padding: 0 10px;
 }
 
 .controls {
     display: flex;
-    width: 600px;
-    margin: 0 auto 10px;
+    flex-direction: row; 
     justify-content: space-around;
+    align-items: center; 
 }
+
+.controls > div {
+    display: flex;
+    align-items: center; 
+}
+
+.controls img {
+    width: 50px;
+    height: fit-content;
+}
+
+.space-bar p {
+    padding: 0 10px 0 5px;
+}   
 
 .stats {
     font-family: "Sedan SC", sans-serif;
     display: flex;
     width: 600px;
-    margin: 0 auto 10px;
+    margin: 0 auto 5px;
     justify-content: space-between;
-    padding: 0 5px;
+    padding: 0 2px;
+    font-weight: bold;
+    font-size: 18px;
 }
+
+.stats h3 {
+    margin-top: 0;
+} 
 
 .grid-wrapper {
     display: flex;
@@ -51,7 +95,7 @@ h1 {
     background-image: url("../images/hogwarts.png");
     background-size: cover;
     background-position: center;
-    background-color: rgb(4, 5, 44);
+    background-color: #04052C;
 }
 
 .grid div {
@@ -66,10 +110,12 @@ button {
     margin: 20px;
     padding: 5px 20px;
     border-radius: 10px;
-    background-color: rgb(4, 5, 44);
-    color: rgb(209, 210, 229);
-    font-family: "Roboto Slab", sans-serif;
-    font-size: 16px;
+    background-color: #ae0001;
+    color: #faefd0;
+    border: 2px solid #740001;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    font-family: "Sedan SC", sans-serif;
+    font-size: 18px;
 }
 
 .player {
@@ -77,7 +123,7 @@ button {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    
+    background-color:
 }
 
 .invaders {
@@ -107,4 +153,8 @@ button {
 
 img {
     height: 100px;
+}
+
+footer {
+    height: 30px;
 }
