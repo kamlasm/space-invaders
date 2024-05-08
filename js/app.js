@@ -5,6 +5,8 @@ const winMessage = "You win! Hogwarts is safe!"
 const loseMessage = "You lose! Voldemort has taken over Hogwarts!"
 const winImage = "images/harry-ron-hermione.png"
 const loseImage = "images/voldy.png"
+const playAgainText = "Play Again"
+const playNextLevelText = "Play Next Level"
 
 /*---------- Variables (state) ---------*/
 let gameOver
@@ -20,10 +22,14 @@ let gameMessage
 let gameImage
 let spaceBarTimeOne = Date.now()
 let spaceBarTimeTwo
+let level = 1
+let invaderSpeed = 1000
+let playAgainBtnText
 
 /*----- Cached Element References  -----*/
 const scoreEl = document.querySelector(".score")
 const livesEl = document.querySelector(".lives")
+const levelEl = document.querySelector(".level")
 const messageEl = document.querySelector(".game-message")
 const cells = document.querySelectorAll(".grid > div")
 const playBtn = document.querySelector(".play-button")
@@ -32,10 +38,13 @@ const gameOverImage = document.querySelector(".game-over-image")
 const landingPage = document.querySelector("#landing-page")
 const landingPageButton = document.querySelector(".solemnly-swear")
 const gamePage = document.querySelector("#game")
+const audioPlayer = document.querySelector("audio");
 
 /*-------------- Functions -------------*/
 
 function openGame() {
+    audioPlayer.src = "sounds/hp-theme.mp3"
+    audioPlayer.play() 
     landingPage.classList.toggle("hide")
     gamePage.classList.toggle("hide")
 }
@@ -44,11 +53,16 @@ function init() {
     playerIdx = 217
     invadersIdxs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 17, 18, 19, 20, 21, 22, 23, 30, 31, 32, 33, 34, 35, 36, 37, 38, 45, 46, 47, 48, 49, 50, 51, 52, 53]
     gameOver = false
-    score = 0
-    lives = 3
+    if (level === 1) {
+        score = 0
+        lives = 3
+        invaderSpeed = 1000
+    }
     gameMessage = ""
     invaderMoveCounter = 1
     invaderMoveDirection = 1
+    messageEl.innerText = gameMessage
+    levelEl.innerText = level
     playAganBtn.classList.add("hide")
     gameOverImage.src = ""
     render()
@@ -63,13 +77,13 @@ function startGame() {
 }
 
 function setTimers() {
-    invadersTimer = setInterval(moveInvaders, 700)
+    invadersTimer = setInterval(moveInvaders, invaderSpeed)
     bombsTimer = setInterval(createBombs, 2000)
 }
 
 function moveInvaders() {
     loseGame()
-    winGame()
+    winLevel()
 
     let invaderMove = 0
     if (!gameOver) {
@@ -95,6 +109,8 @@ function updateInvaderIdx(invaderMove) {
 function createBombs() {
     randomInvaderIdx = Math.floor(Math.random() * invadersIdxs.length)
     let bombIdx = invadersIdxs[randomInvaderIdx]
+    audioPlayer.src = "sounds/death-eater-spell.mp3"
+    audioPlayer.play() 
     let bombMoveTimer = setInterval(() => {
         cells[bombIdx].classList.remove("bombs")
         if (bombIdx < 209 && !gameOver) {
@@ -118,7 +134,7 @@ function bombHitsPlayer(bombIdx) {
 
 function playerAction(event) {
     event.preventDefault()
-    
+
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
         playerMoves(event)
 
@@ -128,7 +144,7 @@ function playerAction(event) {
             spaceBarTimeOne = spaceBarTimeTwo
             playerShoots()
         }
-        
+
     }
     render()
 }
@@ -153,16 +169,18 @@ function playerMoves(event) {
 function playerShoots() {
     let laserIdx = playerIdx - width
     let hit = false
+    audioPlayer.src = "sounds/harry-potter-spell.mp3"
+    audioPlayer.play() 
 
     let laserTimer = setInterval(() => {
         cells[laserIdx].classList.remove("lasers")
-        
+
         if (laserIdx > 15 && !gameOver) {
             laserIdx -= width
             cells[laserIdx].classList.add("lasers")
 
             if (!hit) {
-                
+
                 if (invadersIdxs.includes(laserIdx)) {
                     let indexHit = invadersIdxs.findLastIndex((invaderIdx) => {
                         return invaderIdx === laserIdx
@@ -198,7 +216,6 @@ function render() {
 
     livesEl.innerText = lives
     scoreEl.innerText = score
-    messageEl.innerText = gameMessage
 }
 
 function loseGame() {
@@ -208,17 +225,36 @@ function loseGame() {
         gameOver = true
         gameMessage = loseMessage
         gameImage = loseImage
+        level = 1
+        playAgainBtnText = playAgainText
+        audioPlayer.src = "sounds/voldemort-laugh.mp3"
+        renderGameOver()
+    }
+}
+
+function winLevel() {
+    if (invadersIdxs.length === 0) {
+        gameOver = true
+
+        if (level === 3) {
+            winGame()
+        } else {
+            level++
+            invaderSpeed = invaderSpeed - 200
+            playAgainBtnText = playNextLevelText
+            gameImage = ""
+        }
         renderGameOver()
     }
 }
 
 function winGame() {
-    if (invadersIdxs.length === 0) {
-        gameOver = true
-        gameMessage = winMessage
-        gameImage = winImage
-        renderGameOver()
-    }
+    gameMessage = winMessage
+    gameImage = winImage
+    level = 1
+    playAgainBtnText = playAgainText
+    audioPlayer.src = "sounds/celebrate.mp3"
+    renderGameOver()
 }
 
 function renderGameOver() {
@@ -226,8 +262,10 @@ function renderGameOver() {
         clearInterval(invadersTimer)
         clearInterval(bombsTimer)
         messageEl.innerText = gameMessage
-        playAganBtn.classList.remove("hide")
         gameOverImage.src = gameImage
+        playAganBtn.innerText = playAgainBtnText
+        playAganBtn.classList.remove("hide")
+        audioPlayer.play() 
         cells.forEach((cell, idx) => {
             cells[idx].classList.remove("bombs")
             cells[idx].classList.remove("lasers")

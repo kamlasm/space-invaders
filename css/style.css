@@ -118,12 +118,15 @@ button {
     font-size: 18px;
 }
 
+.play-buttons button:hover {
+    box-shadow: #740001 0px 5px 10px;
+}
+
 .player {
     background-image: url("../images/harry-potter.png");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    background-color:
 }
 
 .invaders {
@@ -151,8 +154,9 @@ button {
     display: none;
 }
 
-img {
+.game-over-image {
     height: 100px;
+    animation: pulse 2s infinite;
 }
 
 footer {
@@ -171,4 +175,17 @@ footer {
 .solemnly-swear {
     position: relative;
     top: 800px;
+    animation: pulse 2s infinite;
 }
+
+@keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
