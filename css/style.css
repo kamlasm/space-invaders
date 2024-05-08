@@ -158,3 +158,17 @@ img {
 footer {
     height: 30px;
 }
+
+#landing-page {
+    margin: 0 auto;
+    height: 800px;
+    background-image: url("../images/maurauders-map.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.solemnly-swear {
+    position: relative;
+    top: 800px;
+}

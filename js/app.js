@@ -29,8 +29,16 @@ const cells = document.querySelectorAll(".grid > div")
 const playBtn = document.querySelector(".play-button")
 const playAganBtn = document.querySelector(".play-again-btn")
 const gameOverImage = document.querySelector(".game-over-image")
+const landingPage = document.querySelector("#landing-page")
+const landingPageButton = document.querySelector(".solemnly-swear")
+const gamePage = document.querySelector("#game")
 
 /*-------------- Functions -------------*/
+
+function openGame() {
+    landingPage.classList.toggle("hide")
+    gamePage.classList.toggle("hide")
+}
 
 function init() {
     playerIdx = 217
@@ -234,5 +242,6 @@ function restartGame() {
 }
 
 /*----------- Event Listeners ----------*/
+landingPageButton.addEventListener("click", openGame)
 playBtn.addEventListener("click", startGame)
 playAganBtn.addEventListener("click", restartGame)
