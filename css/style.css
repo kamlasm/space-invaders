@@ -10,7 +10,7 @@ body {
     font-family: "Roboto Slab", sans-serif;
     background-image: radial-gradient(#740001, #500303);
     background-color: #740001;
-    color: #faefd0;  
+    color: #faefd0;
 }
 
 h1 {
@@ -21,7 +21,8 @@ h1 {
     text-shadow: 2px 2px 1px #740001;
 }
 
-h2, h3 {
+h2,
+h3 {
     color: #D3A625;
 }
 
@@ -40,20 +41,20 @@ h2, h3 {
 }
 
 .intro {
-    margin: 0 auto 5px;  
+    margin: 0 auto 5px;
     padding: 0 10px;
 }
 
 .controls {
     display: flex;
-    flex-direction: row; 
+    flex-direction: row;
     justify-content: space-around;
-    align-items: center; 
+    align-items: center;
 }
 
-.controls > div {
+.controls>div {
     display: flex;
-    align-items: center; 
+    align-items: center;
 }
 
 .controls img {
@@ -63,7 +64,7 @@ h2, h3 {
 
 .space-bar p {
     padding: 0 10px 0 5px;
-}   
+}
 
 .stats {
     font-family: "Sedan SC", sans-serif;
@@ -93,7 +94,7 @@ h2, h3 {
 }
 
 .grid div {
-   
+
     flex: 0 0 6.66%;
     width: 100%;
     aspect-ratio: 1/1;
@@ -132,14 +133,14 @@ button {
 }
 
 .bombs {
-    background-image: url("../images/green-spell-2.png");
+    background-image: url("../images/green-spell.png");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
 
 .lasers {
-    background-image: url("../images/red-spell-2.png");
+    background-image: url("../images/red-spell.png");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -176,16 +177,32 @@ footer {
 
 @keyframes pulse {
     0% {
-      transform: scale(1);
+        transform: scale(1);
     }
-    50% {
-      transform: scale(1.05);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
 
-  .sound {
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.sound {
     height: 25px;
-  }
+}
+
+.voldemort {
+    background-image: url("../images/voldy.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.voldemort-bombs {
+    background-image: url("../images/blue-spell.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}

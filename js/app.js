@@ -5,6 +5,8 @@ const winMessage = "You win! Hogwarts is safe!"
 const loseMessage = "You lose! Voldemort has taken over Hogwarts!"
 const winImage = "images/harry-ron-hermione.png"
 const loseImage = "images/voldy.png"
+const winSound = "sounds/celebrate.mp3"
+const loseSound = "sounds/voldemort-laugh.mp3"
 const playAgainText = "Play Again"
 const playNextLevelText = "Play Next Level"
 
@@ -16,6 +18,7 @@ let playerIdx = 0
 let invadersIdxs = []
 let invadersTimer
 let bombsTimer
+let invaderSpeed = 1000
 let invaderMoveCounter = 1
 let invaderMoveDirection = 1
 let gameMessage
@@ -23,40 +26,58 @@ let gameImage
 let spaceBarTimeOne = Date.now()
 let spaceBarTimeTwo
 let level = 1
-let invaderSpeed = 1000
+let finalLevel = 4
+let voldyLives = 3
+let voldyIdx = 7
+let voldyTimer
 let playAgainBtnText
 
 /*----- Cached Element References  -----*/
+const landingPage = document.querySelector("#landing-page")
+const gamePage = document.querySelector("#game")
+
+const cells = document.querySelectorAll(".grid > div")
+
 const scoreEl = document.querySelector(".score")
 const livesEl = document.querySelector(".lives")
 const levelEl = document.querySelector(".level")
 const messageEl = document.querySelector(".game-message")
-const cells = document.querySelectorAll(".grid > div")
-const playBtn = document.querySelector(".play-button")
-const playAganBtn = document.querySelector(".play-again-btn")
+const voldyLivesEl = document.querySelector(".voldy-lives")
+const voldyEl = document.querySelector(".voldy")
 const gameOverImage = document.querySelector(".game-over-image")
-const landingPage = document.querySelector("#landing-page")
+
 const landingPageButton = document.querySelector(".solemnly-swear")
-const gamePage = document.querySelector("#game")
+const playBtn = document.querySelector(".play-button")
+const playAgainBtn = document.querySelector(".play-again-btn")
+const soundIcon = document.querySelector(".sound")
+
 const allAudioPlayers = document.querySelectorAll("audio")
 const themeAudioPlayer = document.querySelector("#theme")
 const harryAudioPlayer = document.querySelector("#harry-sounds")
 const enemyAudioPlayer = document.querySelector("#enemy-sounds")
-const soundIcon = document.querySelector(".sound")
+const gameAudioPlayer = document.querySelector("#game-music")
+const gameOverAudioPlayer = document.querySelector("#game-over-sounds")
 
 /*-------------- Functions -------------*/
-
 function openGame() {
-    themeAudioPlayer.src = "sounds/hp-theme-2.mp3"
-    themeAudioPlayer.play() 
+    themeAudioPlayer.play()
     landingPage.classList.toggle("hide")
-    landingPage.classList.add("clicked")
     gamePage.classList.toggle("hide")
 }
 
 function init() {
     playerIdx = 217
-    invadersIdxs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 17, 18, 19, 20, 21, 22, 23, 30, 31, 32, 33, 34, 35, 36, 37, 38, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+    if (level === finalLevel) {
+        invadersIdxs = []
+        voldyIdx = 7
+        voldyLives = 3
+        cells[voldyIdx].classList.add("voldemort")
+        voldyEl.classList.remove("hide")
+    } else {
+        invadersIdxs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 17, 18, 19, 20, 21, 22, 23, 30, 31, 32, 33, 34, 35, 36, 37, 38, 45, 46, 47, 48, 49, 50, 51, 52, 53]
+        cells[voldyIdx].classList.remove("voldemort")
+        voldyEl.classList.add("hide")
+    }
     gameOver = false
     if (level === 1) {
         score = 0
@@ -68,7 +89,7 @@ function init() {
     invaderMoveDirection = 1
     messageEl.innerText = gameMessage
     levelEl.innerText = level
-    playAganBtn.classList.add("hide")
+    playAgainBtn.classList.add("hide")
     gameOverImage.src = ""
     render()
 }
@@ -79,16 +100,24 @@ function startGame() {
     themeAudioPlayer.pause()
     playBtn.classList.add("hide")
     document.addEventListener("keyup", playerAction)
-    themeAudioPlayer.src = "sounds/game-background.mp3"
-    themeAudioPlayer.volume = 0.8
-    themeAudioPlayer.play()
-    themeAudioPlayer.loop = true
+    if (level === finalLevel) {
+        gameAudioPlayer.src = "sounds/voldy-music.mp3"
+    } else {
+        gameAudioPlayer.src = "sounds/game-background.mp3"
+    }
+    gameAudioPlayer.volume = 0.7
+    gameAudioPlayer.play()
+    gameAudioPlayer.loop = true
     setTimers()
 }
 
 function setTimers() {
-    invadersTimer = setInterval(moveInvaders, invaderSpeed)
-    bombsTimer = setInterval(createBombs, 2000)
+    if (level === finalLevel) {
+        voldyTimer = setInterval(moveVoldemort, 1000)
+    } else {
+        invadersTimer = setInterval(moveInvaders, invaderSpeed)
+        bombsTimer = setInterval(createBombs, 2000)
+    }
 }
 
 function moveInvaders() {
@@ -120,13 +149,14 @@ function createBombs() {
     randomInvaderIdx = Math.floor(Math.random() * invadersIdxs.length)
     let bombIdx = invadersIdxs[randomInvaderIdx]
     enemyAudioPlayer.src = "sounds/death-eater-spell.mp3"
-    enemyAudioPlayer.play() 
+    enemyAudioPlayer.play()
+
     let bombMoveTimer = setInterval(() => {
         cells[bombIdx].classList.remove("bombs")
         if (bombIdx < 209 && !gameOver) {
             bombIdx += width
-            bombHitsPlayer(bombIdx)
             cells[bombIdx].classList.add("bombs")
+            bombHitsPlayer(bombIdx)
 
         } else if (gameOver) {
             cells[bombIdx].classList.remove("bombs")
@@ -138,9 +168,54 @@ function createBombs() {
 function bombHitsPlayer(bombIdx) {
     if (bombIdx === playerIdx) {
         lives--
+        score = score - 20
         render()
     }
 }
+
+function moveVoldemort() {
+    loseGame()
+
+    cells[voldyIdx].classList.remove("voldemort")
+    randomVoldyIdx = Math.floor(Math.random() * cells.length)
+    voldyIdx = randomVoldyIdx
+    cells[voldyIdx].classList.add("voldemort")
+
+    voldemortShoots()
+}
+
+function voldemortShoots() {
+    if (voldyIdx < 209) {
+        let voldyBombIdx = voldyIdx + width
+        cells[voldyBombIdx].classList.add("voldemort-bombs")
+        enemyAudioPlayer.src = "sounds/voldy-spell.mp3"
+        enemyAudioPlayer.play()
+
+        let voldyBombTimer = setInterval(() => {
+            cells[voldyBombIdx].classList.remove("voldemort-bombs")
+
+            if (voldyBombIdx < 209 && !gameOver) {
+                voldyBombIdx = voldyBombIdx + width
+                cells[voldyBombIdx].classList.add("voldemort-bombs")
+                voldyBombHitsPlayer(voldyBombIdx)
+
+            } else if (gameOver) {
+                cells[voldyBombIdx].classList.remove("voldemort-bombs")
+                clearInterval(voldyBombTimer)
+            }
+
+        }, 200);
+    }
+}
+
+function voldyBombHitsPlayer(voldyBombIdx) {
+    if (voldyBombIdx === playerIdx) {
+        lives--
+        score = score - 50
+        render()
+    }
+}
+
 
 function playerAction(event) {
     event.preventDefault()
@@ -154,7 +229,6 @@ function playerAction(event) {
             spaceBarTimeOne = spaceBarTimeTwo
             playerShoots()
         }
-
     }
     render()
 }
@@ -179,8 +253,7 @@ function playerMoves(event) {
 function playerShoots() {
     let laserIdx = playerIdx - width
     let hit = false
-    harryAudioPlayer.src = "sounds/harry-potter-spell.mp3"
-    harryAudioPlayer.play() 
+    harryAudioPlayer.play()
 
     let laserTimer = setInterval(() => {
         cells[laserIdx].classList.remove("lasers")
@@ -189,21 +262,26 @@ function playerShoots() {
             laserIdx -= width
             cells[laserIdx].classList.add("lasers")
 
-            if (!hit) {
+            if (level === finalLevel) {
+                playerHitsVoldy(laserIdx)
+            } else {
+                if (!hit) {
 
-                if (invadersIdxs.includes(laserIdx)) {
-                    let indexHit = invadersIdxs.findLastIndex((invaderIdx) => {
-                        return invaderIdx === laserIdx
-                    })
+                    if (invadersIdxs.includes(laserIdx)) {
+                        let indexHit = invadersIdxs.findLastIndex((invaderIdx) => {
+                            return invaderIdx === laserIdx
+                        })
 
-                    invadersIdxs.splice(indexHit, 1)
-                    score += 10
-                    cells[indexHit].classList.remove("invaders")
-                    cells[laserIdx].classList.remove("lasers")
-                    render()
-                    clearInterval(laserTimer)
-                    hit = true
+                        invadersIdxs.splice(indexHit, 1)
+                        score += 10
+                        cells[indexHit].classList.remove("invaders")
+                        cells[laserIdx].classList.remove("lasers")
+                        render()
+                        clearInterval(laserTimer)
+                        hit = true
+                    }
                 }
+
             }
 
         } else if (gameOver) {
@@ -211,6 +289,21 @@ function playerShoots() {
             clearInterval(laserTimer)
         }
     }, 200)
+}
+
+function playerHitsVoldy(laserIdx, laserTimer) {
+    if (laserIdx === voldyIdx) {
+        voldyLives--
+        score = score + 30
+        cells[laserIdx].classList.remove("lasers")
+        clearInterval(laserTimer)
+        render()
+
+        if (voldyLives === 0) {
+            cells[voldyIdx].classList.remove("voldemort")
+            winGame()
+        }
+    }
 }
 
 function render() {
@@ -226,6 +319,7 @@ function render() {
 
     livesEl.innerText = lives
     scoreEl.innerText = score
+    voldyLivesEl.innerText = voldyLives
 }
 
 function loseGame() {
@@ -237,7 +331,7 @@ function loseGame() {
         gameImage = loseImage
         level = 1
         playAgainBtnText = playAgainText
-        themeAudioPlayer.src = "sounds/voldemort-laugh.mp3"
+        gameOverAudioPlayer.src = loseSound
         renderGameOver()
     }
 }
@@ -246,24 +340,22 @@ function winLevel() {
     if (invadersIdxs.length === 0) {
         gameOver = true
 
-        if (level === 3) {
-            winGame()
-        } else {
-            level++
-            invaderSpeed = invaderSpeed - 200
-            playAgainBtnText = playNextLevelText
-            gameImage = ""
-        }
+        level++
+        invaderSpeed = invaderSpeed - 200
+        playAgainBtnText = playNextLevelText
+        gameImage = ""
+        gameOverAudioPlayer.src = winSound
         renderGameOver()
     }
 }
 
 function winGame() {
+    gameOver = true
     gameMessage = winMessage
     gameImage = winImage
     level = 1
     playAgainBtnText = playAgainText
-    themeAudioPlayer.src = "sounds/celebrate.mp3"
+    gameOverAudioPlayer.src = winSound
     renderGameOver()
 }
 
@@ -271,14 +363,17 @@ function renderGameOver() {
     if (gameOver) {
         clearInterval(invadersTimer)
         clearInterval(bombsTimer)
+        clearInterval(voldyTimer)
         messageEl.innerText = gameMessage
         gameOverImage.src = gameImage
-        playAganBtn.innerText = playAgainBtnText
-        playAganBtn.classList.remove("hide")
-        themeAudioPlayer.play()
+        playAgainBtn.innerText = playAgainBtnText
+        playAgainBtn.classList.remove("hide")
+        gameAudioPlayer.pause()
+        gameOverAudioPlayer.play()
         cells.forEach((cell, idx) => {
             cells[idx].classList.remove("bombs")
             cells[idx].classList.remove("lasers")
+            cells[idx].classList.remove("voldemort-bombs")
         })
         document.removeEventListener("keyup", playerAction)
     }
@@ -294,7 +389,7 @@ allAudioPlayers.forEach((audioPlayer) => {
     audioPlayer.muted = false
 })
 
-function toggleSound() { 
+function toggleSound() {
     if (!allAudioPlayers[0].muted) {
         allAudioPlayers.forEach((audioPlayer) => {
             audioPlayer.muted = true
@@ -311,5 +406,5 @@ function toggleSound() {
 /*----------- Event Listeners ----------*/
 landingPageButton.addEventListener("click", openGame)
 playBtn.addEventListener("click", startGame)
-playAganBtn.addEventListener("click", restartGame)
+playAgainBtn.addEventListener("click", restartGame)
 soundIcon.addEventListener("click", toggleSound)
