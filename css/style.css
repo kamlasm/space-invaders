@@ -8,11 +8,9 @@ body {
     text-align: center;
     margin: 0 auto;
     font-family: "Roboto Slab", sans-serif;
-    background-image: radial-gradient(#740001, #330102);
-
+    background-image: radial-gradient(#740001, #500303);
     background-color: #740001;
-    color: #faefd0;
-    
+    color: #faefd0;  
 }
 
 h1 {
@@ -20,8 +18,8 @@ h1 {
     margin: 40px auto;
     color: #D3A625;
     font-size: 40px;
+    text-shadow: 2px 2px 1px #740001;
 }
-
 
 h2, h3 {
     color: #D3A625;
@@ -34,7 +32,6 @@ h2, h3 {
     border-radius: 10px;
     background-color: #ae0001;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    
 }
 
 .how-to-play h3 {
@@ -72,16 +69,13 @@ h2, h3 {
     font-family: "Sedan SC", sans-serif;
     display: flex;
     width: 600px;
-    margin: 0 auto 5px;
+    height: 60px;
+    margin: 5px auto;
     justify-content: space-between;
     padding: 0 2px;
     font-weight: bold;
     font-size: 18px;
 }
-
-.stats h3 {
-    margin-top: 0;
-} 
 
 .grid-wrapper {
     display: flex;
@@ -116,6 +110,7 @@ button {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     font-family: "Sedan SC", sans-serif;
     font-size: 18px;
+    cursor: pointer;
 }
 
 .play-buttons button:hover {
@@ -165,7 +160,7 @@ footer {
 
 #landing-page {
     margin: 0 auto;
-    height: 800px;
+    height: 750px;
     background-image: url("../images/maurauders-map.png");
     background-repeat: no-repeat;
     background-size: contain;
@@ -174,8 +169,9 @@ footer {
 
 .solemnly-swear {
     position: relative;
-    top: 800px;
+    top: 500px;
     animation: pulse 2s infinite;
+    padding: 5px 10px;
 }
 
 @keyframes pulse {
@@ -188,4 +184,8 @@ footer {
     100% {
       transform: scale(1);
     }
+  }
+
+  .sound {
+    height: 25px;
   }

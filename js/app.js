@@ -38,14 +38,19 @@ const gameOverImage = document.querySelector(".game-over-image")
 const landingPage = document.querySelector("#landing-page")
 const landingPageButton = document.querySelector(".solemnly-swear")
 const gamePage = document.querySelector("#game")
-const audioPlayer = document.querySelector("audio");
+const allAudioPlayers = document.querySelectorAll("audio")
+const themeAudioPlayer = document.querySelector("#theme")
+const harryAudioPlayer = document.querySelector("#harry-sounds")
+const enemyAudioPlayer = document.querySelector("#enemy-sounds")
+const soundIcon = document.querySelector(".sound")
 
 /*-------------- Functions -------------*/
 
 function openGame() {
-    audioPlayer.src = "sounds/hp-theme.mp3"
-    audioPlayer.play() 
+    themeAudioPlayer.src = "sounds/hp-theme-2.mp3"
+    themeAudioPlayer.play() 
     landingPage.classList.toggle("hide")
+    landingPage.classList.add("clicked")
     gamePage.classList.toggle("hide")
 }
 
@@ -71,8 +76,13 @@ function init() {
 init()
 
 function startGame() {
+    themeAudioPlayer.pause()
     playBtn.classList.add("hide")
     document.addEventListener("keyup", playerAction)
+    themeAudioPlayer.src = "sounds/game-background.mp3"
+    themeAudioPlayer.volume = 0.8
+    themeAudioPlayer.play()
+    themeAudioPlayer.loop = true
     setTimers()
 }
 
@@ -109,8 +119,8 @@ function updateInvaderIdx(invaderMove) {
 function createBombs() {
     randomInvaderIdx = Math.floor(Math.random() * invadersIdxs.length)
     let bombIdx = invadersIdxs[randomInvaderIdx]
-    audioPlayer.src = "sounds/death-eater-spell.mp3"
-    audioPlayer.play() 
+    enemyAudioPlayer.src = "sounds/death-eater-spell.mp3"
+    enemyAudioPlayer.play() 
     let bombMoveTimer = setInterval(() => {
         cells[bombIdx].classList.remove("bombs")
         if (bombIdx < 209 && !gameOver) {
@@ -169,8 +179,8 @@ function playerMoves(event) {
 function playerShoots() {
     let laserIdx = playerIdx - width
     let hit = false
-    audioPlayer.src = "sounds/harry-potter-spell.mp3"
-    audioPlayer.play() 
+    harryAudioPlayer.src = "sounds/harry-potter-spell.mp3"
+    harryAudioPlayer.play() 
 
     let laserTimer = setInterval(() => {
         cells[laserIdx].classList.remove("lasers")
@@ -227,7 +237,7 @@ function loseGame() {
         gameImage = loseImage
         level = 1
         playAgainBtnText = playAgainText
-        audioPlayer.src = "sounds/voldemort-laugh.mp3"
+        themeAudioPlayer.src = "sounds/voldemort-laugh.mp3"
         renderGameOver()
     }
 }
@@ -253,7 +263,7 @@ function winGame() {
     gameImage = winImage
     level = 1
     playAgainBtnText = playAgainText
-    audioPlayer.src = "sounds/celebrate.mp3"
+    themeAudioPlayer.src = "sounds/celebrate.mp3"
     renderGameOver()
 }
 
@@ -265,7 +275,7 @@ function renderGameOver() {
         gameOverImage.src = gameImage
         playAganBtn.innerText = playAgainBtnText
         playAganBtn.classList.remove("hide")
-        audioPlayer.play() 
+        themeAudioPlayer.play()
         cells.forEach((cell, idx) => {
             cells[idx].classList.remove("bombs")
             cells[idx].classList.remove("lasers")
@@ -279,7 +289,27 @@ function restartGame() {
     startGame()
 }
 
+
+allAudioPlayers.forEach((audioPlayer) => {
+    audioPlayer.muted = false
+})
+
+function toggleSound() { 
+    if (!allAudioPlayers[0].muted) {
+        allAudioPlayers.forEach((audioPlayer) => {
+            audioPlayer.muted = true
+        })
+        soundIcon.src = "images/mute.png"
+    } else {
+        allAudioPlayers.forEach((audioPlayer) => {
+            audioPlayer.muted = false
+        })
+        soundIcon.src = "images/sound.png"
+    }
+}
+
 /*----------- Event Listeners ----------*/
 landingPageButton.addEventListener("click", openGame)
 playBtn.addEventListener("click", startGame)
 playAganBtn.addEventListener("click", restartGame)
+soundIcon.addEventListener("click", toggleSound)
