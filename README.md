@@ -16,11 +16,11 @@ Landing page
 
 Initial game display
 
-![](./images/README-images/game-page.png)
+![](./images/README-images/initial-game-page.png)
 
 The game in action
 
-![](./images/README-images/harry-is-hit.png)
+![](./images/README-images/game-in-action.png)
 
 The last level of the game
 
@@ -32,8 +32,14 @@ Win display
 
 ## Technologies Used
 
-Javascript, HTML, CSS
+- Javascript
+- HTML
+- CSS
 
-## Future Enhancements
+## Attributions
+
+[Wallpaper by grand from Wallpapers.com]("https://wallpapers.com/wallpapers/hogwarts-house-logos-harry-potter-desktop-dyqtgu9zpr30a5eb.html")
+
+## Future Improvements
 
  - Store high scores using localStorage. 
