@@ -4,9 +4,13 @@
 
 I created a game called "The Battle of Hogwarts" which is based on "Space Invaders" but with a Harry Potter theme.
 
+## Description of the Game
+
+
+
 ## Deployed Game
 
-[Play the deployed version of the game]() 
+[Play the deployed version of the game](https://kamlasm.github.io/space-invaders/) 
 
 ## Displays from the Game
 

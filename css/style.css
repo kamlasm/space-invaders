@@ -177,7 +177,7 @@ button {
 }
 
 .solemnly-swear {
-    margin: 30px auto;
+    margin: 30px auto 0;
     animation: pulse 2s infinite;
     padding: 5px 10px;
     font-size: 20px;
