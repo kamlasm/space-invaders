@@ -92,9 +92,9 @@ The last level of the game
 
 ![](./images/README-images/voldemort-level.png)
 
-Win display
+Lose display
 
-![](./images/README-images/win-screen.png)
+![](./images/README-images/lose-screen.png)
 
 ## Technologies Used
 

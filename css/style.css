@@ -9,19 +9,9 @@ body {
     margin: 0 auto;
     font-family: "Roboto Slab", sans-serif;
     background-image: url("../images/hogwarts-house-logos-harry-potter.jpg");
-    background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
     background-color: #faefd0;
     color: #faefd0;
-}
-
-#panel {
-    background-image: radial-gradient(#740001, #500303);
-    width: 700px;
-    min-height: 1050px;
-    margin: 0 auto;
-    border-radius: 10px;
 }
 
 h1 {
@@ -38,9 +28,30 @@ h3 {
     color: #D3A625;
 }
 
+#red-panel {
+    background-image: radial-gradient(#740001, #500303);
+    width: 900px;
+    min-height: 850px;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+.game-content {
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+    height: 600px;
+}
+
 .how-to-play {
-    margin: 10px auto 30px;
-    width: 500px;
+    margin: 70px 20px 0 0;
     border: 2px solid #740001;
     border-radius: 10px;
     background-color: #ae0001;
@@ -50,6 +61,7 @@ h3 {
 .how-to-play h3 {
     color: #faefd0;
     margin: 10px 0;
+    align-self: center;
 }
 
 .intro {
@@ -59,7 +71,7 @@ h3 {
 
 .controls {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
 }
@@ -78,6 +90,13 @@ h3 {
     padding: 0 10px 0 5px;
 }
 
+.grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 4;
+}
+
 .stats {
     font-family: "Sedan SC", sans-serif;
     display: flex;
@@ -88,11 +107,6 @@ h3 {
     padding: 0 2px;
     font-weight: bold;
     font-size: 18px;
-}
-
-.grid-wrapper {
-    display: flex;
-    justify-content: center;
 }
 
 .grid {
@@ -106,7 +120,6 @@ h3 {
 }
 
 .grid div {
-
     flex: 0 0 6.66%;
     width: 100%;
     aspect-ratio: 1/1;
@@ -162,6 +175,10 @@ button {
     display: none;
 }
 
+.hide-buttons {
+    visibility: hidden;
+}
+
 .game-over-image {
     height: 100px;
     animation: pulse 2s infinite;
@@ -169,18 +186,23 @@ button {
 
 #landing-page {
     margin: 0 auto;
-    min-height: 900px;
+    min-height: 800px;
 }
 
 .map {
-    height: 900px;
+    height: 800px;
+    margin: 0 auto;
+    display: block;
+    padding-top: 10px; 
 }
 
 .solemnly-swear {
-    margin: 30px auto 0;
+    margin: 0 auto 0;
     animation: pulse 2s infinite;
     padding: 5px 10px;
     font-size: 20px;
+    position: relative;
+    bottom: 200px;
 }
 
 @keyframes pulse {
