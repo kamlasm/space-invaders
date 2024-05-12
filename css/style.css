@@ -18,11 +18,11 @@ h1 {
     font-family: "Sedan SC", sans-serif;
     margin: 0 auto;
     padding: 20px;
-    color: #D3A625;
     font-size: 40px;
     text-shadow: 2px 2px 1px #740001;
 }
 
+h1,
 h2,
 h3 {
     color: #D3A625;
@@ -46,8 +46,6 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    flex-grow: 1;
-    height: 600px;
 }
 
 .how-to-play {
@@ -94,7 +92,6 @@ h3 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    flex-grow: 4;
 }
 
 .stats {
@@ -107,6 +104,10 @@ h3 {
     padding: 0 2px;
     font-weight: bold;
     font-size: 18px;
+}
+
+.sound {
+    height: 25px;
 }
 
 .grid {
@@ -171,12 +172,22 @@ button {
     background-position: center;
 }
 
-.hide {
-    display: none;
+.voldemort {
+    background-image: url("../images/voldy.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
 
-.hide-buttons {
-    visibility: hidden;
+.voldemort-bombs {
+    background-image: url("../images/blue-spell.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.hide {
+    display: none;
 }
 
 .game-over-image {
@@ -193,7 +204,7 @@ button {
     height: 800px;
     margin: 0 auto;
     display: block;
-    padding-top: 10px; 
+    padding-top: 10px;
 }
 
 .solemnly-swear {
@@ -217,22 +228,4 @@ button {
     100% {
         transform: scale(1);
     }
-}
-
-.sound {
-    height: 25px;
-}
-
-.voldemort {
-    background-image: url("../images/voldy.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-}
-
-.voldemort-bombs {
-    background-image: url("../images/blue-spell.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
 }

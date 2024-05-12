@@ -46,10 +46,10 @@ const voldyLivesEl = document.querySelector(".voldy-lives")
 const voldyEl = document.querySelector(".voldy")
 const gameOverImage = document.querySelector(".game-over-image")
 
-const landingPageButton = document.querySelector(".solemnly-swear")
+const landingPageBtn = document.querySelector(".landing-page-btn")
 const playBtn = document.querySelector(".play-button")
 const playAgainBtn = document.querySelector(".play-again-btn")
-const soundIcon = document.querySelector(".sound")
+const soundBtn = document.querySelector(".sound")
 
 const allAudioPlayers = document.querySelectorAll("audio")
 const themeAudioPlayer = document.querySelector("#theme")
@@ -121,9 +121,6 @@ function setTimers() {
 }
 
 function moveInvaders() {
-    loseGame()
-    winLevel()
-
     let invaderMove = 0
     if (!gameOver) {
         if (invaderMoveCounter % 7 !== 0) {
@@ -143,6 +140,7 @@ function updateInvaderIdx(invaderMove) {
         invadersIdxs[idx] = invaderIdx + invaderMove
     })
     render()
+    loseGame()
 }
 
 function createBombs() {
@@ -170,12 +168,11 @@ function bombHitsPlayer(bombIdx) {
         lives--
         score = score - 20
         render()
+        loseGame()
     }
 }
 
 function moveVoldemort() {
-    loseGame()
-
     cells[voldyIdx].classList.remove("voldemort")
     randomVoldyIdx = Math.floor(Math.random() * cells.length)
     voldyIdx = randomVoldyIdx
@@ -203,7 +200,6 @@ function voldemortShoots() {
                 cells[voldyBombIdx].classList.remove("voldemort-bombs")
                 clearInterval(voldyBombTimer)
             }
-
         }, 200);
     }
 }
@@ -213,9 +209,9 @@ function voldyBombHitsPlayer(voldyBombIdx) {
         lives--
         score = score - 50
         render()
+        loseGame()
     }
 }
-
 
 function playerAction(event) {
     event.preventDefault()
@@ -263,32 +259,36 @@ function playerShoots() {
             cells[laserIdx].classList.add("lasers")
 
             if (level === finalLevel) {
-                playerHitsVoldy(laserIdx)
+                playerHitsVoldy(laserIdx, laserTimer)
             } else {
-                if (!hit) {
-
-                    if (invadersIdxs.includes(laserIdx)) {
-                        let indexHit = invadersIdxs.findLastIndex((invaderIdx) => {
-                            return invaderIdx === laserIdx
-                        })
-
-                        invadersIdxs.splice(indexHit, 1)
-                        score += 10
-                        cells[indexHit].classList.remove("invaders")
-                        cells[laserIdx].classList.remove("lasers")
-                        render()
-                        clearInterval(laserTimer)
-                        hit = true
-                    }
-                }
-
-            }
+                playerHitsInvaders(laserIdx, laserTimer, hit)
+              }
 
         } else if (gameOver) {
             cells[laserIdx].classList.remove("lasers")
             clearInterval(laserTimer)
         }
     }, 200)
+}
+
+function playerHitsInvaders(laserIdx, laserTimer, hit) {
+    if (!hit) {
+
+        if (invadersIdxs.includes(laserIdx)) {
+            let indexHit = invadersIdxs.findLastIndex((invaderIdx) => {
+                return invaderIdx === laserIdx
+            })
+
+            invadersIdxs.splice(indexHit, 1)
+            score += 10
+            cells[indexHit].classList.remove("invaders")
+            cells[laserIdx].classList.remove("lasers")
+            render()
+            winLevel()
+            clearInterval(laserTimer)
+            hit = true
+        }
+    }
 }
 
 function playerHitsVoldy(laserIdx, laserTimer) {
@@ -339,7 +339,6 @@ function loseGame() {
 function winLevel() {
     if (invadersIdxs.length === 0) {
         gameOver = true
-
         level++
         invaderSpeed = invaderSpeed - 200
         playAgainBtnText = playNextLevelText
@@ -384,7 +383,6 @@ function restartGame() {
     startGame()
 }
 
-
 allAudioPlayers.forEach((audioPlayer) => {
     audioPlayer.muted = false
 })
@@ -394,17 +392,17 @@ function toggleSound() {
         allAudioPlayers.forEach((audioPlayer) => {
             audioPlayer.muted = true
         })
-        soundIcon.src = "images/mute.png"
+        soundBtn.src = "images/mute.png"
     } else {
         allAudioPlayers.forEach((audioPlayer) => {
             audioPlayer.muted = false
         })
-        soundIcon.src = "images/sound.png"
+        soundBtn.src = "images/sound.png"
     }
 }
 
 /*----------- Event Listeners ----------*/
-landingPageButton.addEventListener("click", openGame)
+landingPageBtn.addEventListener("click", openGame)
 playBtn.addEventListener("click", startGame)
 playAgainBtn.addEventListener("click", restartGame)
-soundIcon.addEventListener("click", toggleSound)
+soundBtn.addEventListener("click", toggleSound)
